@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daddy Mear Hogwarts</title>
+<!-- an empty icon, so the browser does not ask for a favicon that is not there and log the 404 -->
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<!--
+  The screen a player sees while they connect.
+
+  Garry's Mod opens this page in its own browser when the server's sv_loadingurl points at it. It is a copy of
+  the loading screen the game itself shows at the character menu (ui/apps/charmenu/src/Loading.tsx), rebuilt
+  without Preact so it stands on its own: the same painted picture drifting slowly, the same teal band and tip,
+  the same four house emblems morphing into each other in the corner.
+
+  Two coordinate systems, as in the original: the picture and the shade fill the window, while the band and the
+  corner sit on a 1920x1080 stage that is scaled as a whole - so every number in style.css is the one measured
+  on the game's own screens.
+-->
+<body>
+  <div class="cm-load">
+    <span class="cm-load-image" id="image"></span>
+    <span class="cm-load-shade"></span>
+
+    <div class="cm-stage" id="stage">
+      <div class="cm-load-band">
+        <span class="cm-load-band-glow"></span>
+        <p class="cm-load-tip" id="tip"></p>
+      </div>
+
+      <div class="cm-load-corner">
+        <!--
+          Drawn on a canvas rather than painted through a CSS mask. The in-game screen uses `mask-image`, which
+          the game's own UI browser supports and the loading screen's browser does not - there the emblems
+          simply never appeared. A canvas draws the same thing anywhere: one cell of the sheet, tinted gold.
+        -->
+        <canvas class="cm-load-spinner" id="spinner" width="168" height="168"></canvas>
+        <span class="cm-load-label">Yükleniyor</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- quiet background music; volume and the retry that gets it past autoplay blocking live in main.js -->
+  <audio id="music" src="music.mp3" loop preload="auto"></audio>
+
+  <script src="main.js"></script>
+</body>
+</html>

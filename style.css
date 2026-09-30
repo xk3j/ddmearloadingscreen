@@ -1,0 +1,178 @@
+/*
+ * Every number here is the one in ui/apps/charmenu/src/charmenu.css (lines 73-185), measured on the game's own
+ * 1920x1080 screens, and it is copied rather than recomputed so the two screens cannot drift apart.
+ *
+ * The game's browser is old: no `inset`, no `aspect-ratio`, no pseudo-element border-images, so the original
+ * spells out left/top/right/bottom everywhere. This page keeps to the same rules, and also avoids flex `gap`,
+ * which the loading screen's browser is older than.
+ */
+
+@font-face {
+  font-family: 'Daddy Cinzel';
+  src: url('fonts/daddy_cinzel.woff2') format('woff2'), url('fonts/daddy_cinzel.ttf') format('truetype');
+  font-weight: 400 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Daddy Garamond';
+  src: url('fonts/daddy_ebgaramond.woff2') format('woff2'), url('fonts/daddy_ebgaramond.ttf') format('truetype');
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+/* the kit keeps these on :host, inside a shadow root; out here they belong to the document */
+:root {
+  --hl-text: #fefefe;
+  --hl-text-dim: #cfd2d6;
+  --hl-font-display: 'Daddy Cinzel', 'Georgia', serif;
+  --hl-font-body: 'Daddy Garamond', 'Georgia', serif;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #030406;
+}
+
+body {
+  font-family: var(--hl-font-body);
+  color: var(--hl-text);
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: none;
+}
+
+.cm-load {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  background: #030406;
+}
+
+@keyframes cm-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes cm-drift {
+  from {
+    transform: scale(1.02) translate(0, 0);
+  }
+  to {
+    transform: scale(1.12) translate(-1.5%, -1%);
+  }
+}
+
+/* the painted loading image, cover-fitted, drifting slowly the way the game's loading screens do */
+.cm-load-image {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  animation: cm-fade-in 1200ms ease, cm-drift 30s ease-out forwards;
+}
+
+.cm-load-shade {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0) 22%, rgba(0, 0, 0, 0) 62%, rgba(0, 0, 0, 0.82)),
+    radial-gradient(130% 100% at 50% 40%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.55));
+}
+
+/* the 1920x1080 stage the band and the corner are measured on; --k is set from JS and again on resize */
+.cm-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform: translate(-50%, -50%) scale(var(--k, 1));
+}
+
+/* confirmation.png: a wide deep-teal band across the lower screen carrying the text, soft at both ends */
+.cm-load-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 842px;
+  height: 118px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, rgba(8, 30, 38, 0), rgba(8, 30, 38, 0.86) 22%, rgba(8, 30, 38, 0.86) 78%, rgba(8, 30, 38, 0));
+}
+
+.cm-load-band-glow {
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(206, 170, 96, 0), rgba(206, 170, 96, 0.8), rgba(206, 170, 96, 0));
+}
+
+.cm-load-tip {
+  position: relative;
+  max-width: 1100px;
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.35;
+  text-align: center;
+  color: #f2f0ea;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  animation: cm-fade-in 700ms ease;
+}
+
+/*
+  The emblems and "Yükleniyor" stand in the bottom LEFT corner. This is the one place the page parts with the
+  in-game screen, which keeps them on the right; the distance from the edge and everything else is unchanged.
+*/
+.cm-load-corner {
+  position: absolute;
+  left: 70px;
+  bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+/*
+  The game's morphing house emblems (6x6 flipbook), in its gold.
+
+  The in-game screen paints these with a CSS mask. The loading screen's browser is older than the game's own UI
+  browser and ignores `mask-image`, so here the sheet is drawn onto a canvas instead (main.js) and this rule only
+  gives it its size. The backing store is twice the drawn size so the emblems stay sharp on a large screen,
+  where the whole stage is scaled up.
+*/
+.cm-load-spinner {
+  width: 84px;
+  height: 84px;
+  /* the original uses flex `gap: 16px`; a margin says the same thing to an older browser */
+  margin-right: 16px;
+}
+
+.cm-load-label {
+  font-family: var(--hl-font-display);
+  font-size: 18px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--hl-text-dim);
+}
